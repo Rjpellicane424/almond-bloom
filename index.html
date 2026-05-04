@@ -327,7 +327,19 @@
                 Almond Bloom when it launches.
               </p>
 
-              <form class="waitlist-form" id="waitlist-form" novalidate>
+              <form
+                class="waitlist-form"
+                id="waitlist-form"
+                action="https://formsubmit.co/almondbloom.info@gmail.com"
+                method="POST"
+                novalidate
+              >
+                <input type="hidden" name="_subject" value="New Almond Bloom waitlist signup" />
+                <input type="hidden" name="_template" value="table" />
+                <input type="hidden" name="_captcha" value="false" />
+                <input type="hidden" name="_next" value="https://almondbloom.info/thanks.html" />
+                <input type="text" name="_honey" tabindex="-1" autocomplete="off" hidden />
+                <input type="hidden" name="source" value="Almond Bloom landing page waitlist" />
                 <label class="sr-only" for="email">Email address</label>
                 <input
                   id="email"
@@ -337,7 +349,7 @@
                   autocomplete="email"
                   required
                 />
-                <button class="button button-primary" id="waitlist-submit" type="button">Join the Waitlist</button>
+                <button class="button button-primary" id="waitlist-submit" type="submit">Join the Waitlist</button>
               </form>
 
               <p class="form-status" id="form-status" aria-live="polite"></p>
