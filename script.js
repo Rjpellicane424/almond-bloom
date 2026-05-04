@@ -6,6 +6,7 @@ const waitlistForm = document.getElementById('waitlist-form');
 const emailInput = document.getElementById('email');
 const formStatus = document.getElementById('form-status');
 const submitButton = document.getElementById('waitlist-submit');
+const waitlistEndpoint = '/api/waitlist';
 
 const setHeaderState = () => {
   if (!header) return;
@@ -56,7 +57,7 @@ if (loopSteps.length > 0) {
 }
 
 if (waitlistForm && emailInput && formStatus && submitButton) {
-  const handleWaitlistSubmit = (event) => {
+  const handleWaitlistSubmit = async (event) => {
     event.preventDefault();
 
     const email = emailInput.value.trim();
@@ -70,20 +71,26 @@ if (waitlistForm && emailInput && formStatus && submitButton) {
       return;
     }
 
-    try {
-      const storageKey = 'almond-bloom-waitlist';
-      const currentEntries = JSON.parse(localStorage.getItem(storageKey) || '[]');
-      const nextEntry = {
-        email,
-        submittedAt: new Date().toISOString(),
-      };
+    submitButton.disabled = true;
+    submitButton.textContent = 'Joining...';
 
-      localStorage.setItem(
-        storageKey,
-        JSON.stringify([nextEntry, ...currentEntries].slice(0, 50)),
-      );
+    try {
+      const response = await fetch(waitlistEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        throw new Error(result.error || 'Waitlist submission failed.');
+      }
     } catch (error) {
-      console.warn('Waitlist submission could not be persisted locally.', error);
+      formStatus.textContent = error.message || 'Something went wrong. Please try again.';
+      formStatus.classList.add('is-error');
+      submitButton.disabled = false;
+      submitButton.textContent = 'Join the Waitlist';
+      return;
     }
 
     emailInput.value = '';
