@@ -58,6 +58,25 @@ module.exports = async (request, response) => {
       text: `New Almond Bloom waitlist signup: ${email}`,
     });
 
+    await transporter.sendMail({
+      from: notifyFrom,
+      to: email,
+      subject: "You're on the Almond Bloom waitlist",
+      html: `
+        <p>You're on the Almond Bloom waitlist.</p>
+        <p>Thanks for joining early. We'll reach out as soon as there is more to share.</p>
+        <p>The Moment Matters,<br />Almond Bloom</p>
+      `,
+      text: [
+        "You're on the Almond Bloom waitlist.",
+        '',
+        "Thanks for joining early. We'll reach out as soon as there is more to share.",
+        '',
+        'The Moment Matters,',
+        'Almond Bloom',
+      ].join('\n'),
+    });
+
     json(response, 200, { ok: true });
   } catch (error) {
     json(response, 500, { error: 'Waitlist submission failed.' });
