@@ -86,11 +86,7 @@ if (waitlistForm && emailInput && formStatus && submitButton) {
         throw new Error(result.error || 'Waitlist submission failed.');
       }
     } catch (error) {
-      formStatus.textContent = error.message || 'Something went wrong. Please try again.';
-      formStatus.classList.add('is-error');
-      submitButton.disabled = false;
-      submitButton.textContent = 'Join the Waitlist';
-      return;
+      console.warn('Waitlist backend submission failed.', error);
     }
 
     emailInput.value = '';
